@@ -26,8 +26,13 @@ wss.on('connection', (ws:WebSocket)=>{
   ws.on('message', (message:string)=>{
     ws.send(`received message ${message}`);
     console.log(`received message from client ${message}`);
+    //broadcast message to all clients
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(`Broadcast: ${message}`);
+      }
+    });
     
-    // need to display the message to the postman client
   })
   
   ws.on('close', ()=>{
