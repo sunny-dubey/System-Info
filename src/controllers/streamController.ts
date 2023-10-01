@@ -88,6 +88,24 @@ export const stopStream = (req: Request, res: Response, next: NextFunction): voi
 
 };
 
-export const destroyStream = (req: Request, res: Response): void => {
+export const destroyStream = (req: Request, res: Response, next:NextFunction): void => {
   // implementation
+  let {id, type} = req.params;
+  type = type.toLowerCase();
+  if(!activeStreams[id]){
+    return next(new AppError('Stream not found',400));
+  }
+  if(activeStreams[id].streamType!==type){
+    return next(new AppError('Please check Stream Type', 400));
+  }
+  // stop the stream if its running
+  if(activeStreams[id].isRunning){
+    activeStreams[id].isRunning = false;
+    stopStreamtoWebSocket(id);
+  }
+  //remove the stream from the list of active streams
+  delete activeStreams[id];
+  res.status(200).json({
+    id,type,message:'Stream destroyed Successfully',
+  })
 };
