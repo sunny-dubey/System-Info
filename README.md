@@ -34,3 +34,48 @@ To run this project onto your local server
 ```bash
   npm run build && npm run start
 ```
+
+## API Reference
+
+#### Create Stream
+
+```http
+  POST /api/create/:type
+```
+
+| Parameter | Type     | Description                                     |
+| :-------- | :------- | :---------------------------------------------- |
+| `type`    | `string` | **Required**. Type(cpu/memory) to create stream |
+
+#### Start Stream
+
+```http
+  POST /api/start/:id/:type
+```
+
+| Parameter | Type     | Description                                   |
+| :-------- | :------- | :-------------------------------------------- |
+| `id`      | `string` | **Required**. Id of stream                    |
+| `type`    | `string` | **Required**. Type(cu/memory) of start stream |
+
+#### Stop Stream
+
+```http
+  POST /api/stop/:id/:type
+```
+
+| Parameter | Type     | Description                                  |
+| :-------- | :------- | :------------------------------------------- |
+| `id`      | `string` | **Required**. Id of stream                   |
+| `type`    | `string` | **Required**. Type(cu/memory) of stop stream |
+
+#### Stop Stream
+
+```http
+  POST /api/destroy/:id/:type
+```
+
+| Parameter | Type     | Description                                     |
+| :-------- | :------- | :---------------------------------------------- |
+| `id`      | `string` | **Required**. Id of stream                      |
+| `type`    | `string` | **Required**. Type(cu/memory) of destroy stream |
