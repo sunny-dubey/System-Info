@@ -1,6 +1,7 @@
 import express, {Request,Response} from 'express';
 import http from 'http';
 import WebSocket from 'ws';
+import router from './routes/streamRoutes';
 
 const app = express();
 const server = http.createServer(app);
@@ -8,6 +9,7 @@ const wss = new WebSocket.Server({server});
 
 // middleware
 app.use(express.json());
+app.use('/api', router);
 
 // testing routes
 app.get("/", (req:Request,res:Response)=>{
