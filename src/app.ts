@@ -5,7 +5,7 @@ import router from './routes/streamRoutes';
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({noServer:true});
 
 // middleware
 app.use(express.json());
@@ -15,8 +15,7 @@ app.use('/api', router);
 app.get("/", (req:Request,res:Response)=>{
   const websocket = new WebSocket("ws://localhost:3000");
   websocket.addEventListener('open', ()=>{
-    console.log("we are connected")
-    websocket.send("yo");
+    websocket.send("dushyant ");
   })
   res.send("this is a test route");
 })
@@ -29,11 +28,11 @@ wss.on('connection', (ws:WebSocket)=>{
     ws.send(`received message ${message}`);
     console.log(`received message from client ${message}`);
     //broadcast message to all clients
-    wss.clients.forEach((client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(`Broadcast: ${message}`);
-      }
-    });
+    // wss.clients.forEach((client) => {
+    //   if (client !== ws && client.readyState === WebSocket.OPEN) {
+    //     client.send(`Broadcast: ${message}`);
+    //   }
+    // });
     
   })
   
@@ -44,6 +43,12 @@ wss.on('connection', (ws:WebSocket)=>{
   ws.send('welcome to the websocket server!')
 })
 
+// Integrate WebSocket with the existing server
+server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit('connection', ws, request);
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 
@@ -51,3 +56,5 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, ()=>{
   console.log(`server is running on port ${PORT}`);
 })
+
+export default wss;

@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
-import {fetchCpuUsage, fetchMemoryUsage} from "../utils/systemInfo"
+
 import AppError from '../utils/appError';
+import {sendStreamDatatoWebSocket} from '../utils/webSocket'
+
 
 // enum for stream types
 enum StreamType{
@@ -37,8 +39,30 @@ export const createStream = (req: Request, res: Response, next: NextFunction): v
     })
 };
 
-export const startStream = (req: Request, res: Response): void => {
+export const startStream = (req: Request, res: Response, next: NextFunction): void => {
   // implementation
+  let {id, type} = req.params;
+  type = type.toLowerCase();
+  if(!activeStreams[id]){
+    return next(new AppError("Stream not found!", 400));
+  }
+  if(activeStreams[id].streamType!=type){
+    return next(new AppError("Stream Type is incorrect for this Id", 400));
+  }
+  if(activeStreams[id].isRunning==true){
+    return next(new AppError("This stream is already running!", 400));
+  }
+
+  // enable stream
+  activeStreams[id].isRunning = true;
+  
+
+  sendStreamDatatoWebSocket(id, type);
+
+  res.status(200).send({
+   id, type
+  })
+
 };
 
 export const stopStream = (req: Request, res: Response): void => {
