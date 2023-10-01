@@ -35,7 +35,7 @@ export const createStream = (req: Request, res: Response, next: NextFunction): v
     res.status(200).json({
       streamId: streamId,
       StreamType: type,
-      message: "Stream created SuccessfullyQ"
+      message: "Stream created Successfully"
     })
 };
 
@@ -60,13 +60,28 @@ export const startStream = (req: Request, res: Response, next: NextFunction): vo
   sendStreamDatatoWebSocket(id, type);
 
   res.status(200).send({
-   id, type
+   id, type,
+   message: "Stream started Successfully"
   })
 
 };
 
-export const stopStream = (req: Request, res: Response): void => {
-  // implementation
+export const stopStream = (req: Request, res: Response, next: NextFunction): void => {
+  // Implementation
+  let {id, type} = req.params;
+  type = type.toLowerCase();
+  if(!activeStreams[id]){
+    return next(new AppError("Stream not found",400));
+  }
+  if(activeStreams[id].streamType!=type){
+    return next(new AppError("Please check Stream Type", 400));
+  }
+  if(!activeStreams[id].isRunning==false){
+    return next(new AppError("This stream already stoppped", 400));
+  }
+  activeStreams[id].isRunning = false;
+
+
 };
 
 export const destroyStream = (req: Request, res: Response): void => {
