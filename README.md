@@ -81,3 +81,11 @@ API service to stream CPU and Memory (RAM) usage in real-time using WebSocket
 | :-------- | :------- | :---------------------------------------------- |
 | `id`      | `string` | **Required**. Id of stream                      |
 | `type`    | `string` | **Required**. Type(cu/memory) of destroy stream |
+
+## Documentation
+
+[Documentation](https://documenter.getpostman.com/view/28873754/2s9YJbzMgj)
+
+## Authors
+
+[@sunny-dubey](https://github.com/sunny-dubey)
