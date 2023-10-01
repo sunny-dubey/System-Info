@@ -95,10 +95,10 @@ export const sendStreamDatatoWebSocket = (streamId: string, type: string): void 
   activeStreams[streamId] = {
     intervalId: interval,
   };
-  console.log(activeStreams);
+  //console.log(activeStreams);
 };
 
-export const stopStream = (streamId: string): void => {
+export const stopStreamtoWebSocket = (streamId: string): void => {
   if (activeStreams[streamId] && activeStreams[streamId].intervalId) {
     clearInterval(activeStreams[streamId].intervalId);
 
@@ -106,6 +106,10 @@ export const stopStream = (streamId: string): void => {
     delete activeStreams[streamId];
   }
 };
+
+// module.exports = {
+//   stopStream,sendStreamDatatoWebSocket
+// }
 
 // Example usage
 // Assuming you have a streamId (replace 'yourStreamId' with the actual streamId)

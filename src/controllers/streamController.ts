@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 
 import AppError from '../utils/appError';
-import {sendStreamDatatoWebSocket} from '../utils/webSocket'
+import {sendStreamDatatoWebSocket,stopStreamtoWebSocket} from '../utils/webSocket'
 
 
 // enum for stream types
@@ -76,10 +76,14 @@ export const stopStream = (req: Request, res: Response, next: NextFunction): voi
   if(activeStreams[id].streamType!=type){
     return next(new AppError("Please check Stream Type", 400));
   }
-  if(!activeStreams[id].isRunning==false){
+  if(activeStreams[id].isRunning==false){
     return next(new AppError("This stream already stoppped", 400));
   }
   activeStreams[id].isRunning = false;
+  stopStreamtoWebSocket(id);
+  res.status(200).json({
+    id,type,message: "Stream stopped Successfully"
+  })
 
 
 };
