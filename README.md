@@ -15,7 +15,7 @@ API service to stream CPU and Memory (RAM) usage in real-time using WebSocket
 
 ## Installation
 
-To run this project onto your local server
+### To run this project onto your local server
 
 - install npm modules onto root directry
 
@@ -34,6 +34,8 @@ To run this project onto your local server
 ```bash
   npm run build && npm run start
 ```
+
+#### Use WebSocket Client like Postman
 
 ## API Reference
 
