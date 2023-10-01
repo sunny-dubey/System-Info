@@ -1,6 +1,8 @@
 import express, {Request,Response} from 'express';
 import http from 'http';
 import WebSocket from 'ws';
+import fs from 'fs';
+import path from 'path';
 import router from './routes/streamRoutes';
 
 const app = express();
@@ -13,11 +15,10 @@ app.use('/api', router);
 
 // testing routes
 app.get("/", (req:Request,res:Response)=>{
-  const websocket = new WebSocket("ws://localhost:3000");
-  websocket.addEventListener('open', ()=>{
-    websocket.send("dushyant ");
-  })
-  res.send("this is a test route");
+  const readmePath = 'README.md';
+  const data = fs.readFileSync(readmePath, 'utf-8');
+  res.writeHead(500, { 'Content-Type': 'text/plain' });
+  res.end(data);
 })
 
 // websocket endpoint

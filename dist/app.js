@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const ws_1 = __importDefault(require("ws"));
+const fs_1 = __importDefault(require("fs"));
 const streamRoutes_1 = __importDefault(require("./routes/streamRoutes"));
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
@@ -15,11 +16,10 @@ app.use(express_1.default.json());
 app.use('/api', streamRoutes_1.default);
 // testing routes
 app.get("/", (req, res) => {
-    const websocket = new ws_1.default("ws://localhost:3000");
-    websocket.addEventListener('open', () => {
-        websocket.send("dushyant ");
-    });
-    res.send("this is a test route");
+    const readmePath = 'README.md';
+    const data = fs_1.default.readFileSync(readmePath, 'utf-8');
+    res.writeHead(500, { 'Content-Type': 'text/plain' });
+    res.end(data);
 });
 // websocket endpoint
 wss.on('connection', (ws) => {
